@@ -1,6 +1,3 @@
-import java.nio.file.Files
-import java.nio.file.StandardCopyOption
-
 plugins {
     java
     id("io.papermc.paperweight.userdev") version "1.3.5"
@@ -18,17 +15,6 @@ dependencies {
 
     compileOnly(project(":api")) {
         isTransitive = false
-    }
-}
-
-publishing {
-    publications {
-        create<org.gradle.api.publish.maven.MavenPublication>("maven") {
-            groupId = group as String
-            artifactId = "nms"
-
-            from(components["java"])
-        }
     }
 }
 
