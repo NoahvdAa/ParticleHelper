@@ -4,7 +4,8 @@ plugins {
     id("xyz.jpenilla.run-paper") version "1.0.6"
 }
 
-group = "com.owen1212055"
+group = "com.owen1212055.particlehelper"
+version = parent?.version as String
 
 repositories {
     mavenCentral()
@@ -18,7 +19,6 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.0.0")
 }
 
-
 tasks {
     compileJava {
         options.encoding = Charsets.UTF_8.name()
@@ -29,19 +29,23 @@ tasks {
         dependencies {
             relocate("org.bstats", "com.owen1212055.${rootProject.name}.libs.bstats")
         }
+    }
 
-        val nmsProject = project(":nms")
-        val moveTask = nmsProject.tasks.getByName("moveFiles")
-
-        moveTask.dependsOn(nmsProject.getTasksByName("reobfJar", true))
-
-        finalizedBy(moveTask)
+    assemble {
+        dependsOn(shadowJar)
     }
 
     runServer {
         minecraftVersion("1.18.2")
     }
 
+    processResources {
+        filesMatching("plugin.yml") {
+            expand(
+                "version" to version
+            )
+        }
+    }
 }
 
 java {
